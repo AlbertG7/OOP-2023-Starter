@@ -1,10 +1,12 @@
 package ie.tudublin;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Word {
     private String word;
     private ArrayList<Follow> follows;
+    private Random random = new Random();
 
     // Constructor
     public Word(String word) {
@@ -40,6 +42,26 @@ public class Word {
             }
         }
         return null;
+    }
+
+    // Get the next word based on the probability of occurrence
+    public String getNextWord() {
+        int totalCount = 0;
+        for (Follow follow : follows) {
+            totalCount += follow.getCount();
+        }
+
+        int randomCount = random.nextInt(totalCount);
+        int currentCount = 0;
+
+        for (Follow follow : follows) {
+            currentCount += follow.getCount();
+            if (currentCount > randomCount) {
+                return follow.getWord();
+            }
+        }
+
+        return follows.get(follows.size() - 1).getWord();
     }
 
     // toString method
